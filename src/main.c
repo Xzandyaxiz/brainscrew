@@ -41,20 +41,19 @@ static int bf_parse(Parser *parser) {
       case '.':
         putchar(parser->reg_list[parser->reg_pointer]);
         break;
-    
+
       case '[':
-        loop_start = parser->reg_pointer;
-        loop_conditional = loop_start + 1;
+        loop_start = iter;
+        loop_conditional = parser->reg_pointer;
         break;
 
       case ']':
-        loop_end = parser->reg_pointer;
-        parser->reg_pointer = loop_start;
-     
-        if (!(parser->reg_list[loop_conditional])) {
-          parser->reg_pointer = loop_end;
+        loop_end = iter;
+        iter = loop_start;
+
+        if (parser->reg_list[loop_conditional] == 0) {
+          iter = loop_end;
         }
-     
         break;
     }
 
