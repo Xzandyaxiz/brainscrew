@@ -16,7 +16,7 @@ static int bf_parse(Parser *parser) {
   long iter = 0;
   char current_char;
 
-  bool is_loop;
+  int loop_conditional, loop_start, loop_end;
 
   while(iter < strlen(parser->source)) {
     current_char = parser->source[iter];
@@ -43,9 +43,21 @@ static int bf_parse(Parser *parser) {
         break;
     
       case '[':
+        loop_start = parser->reg_pointer;
+        loop_conditional = loop_start + 1;
+        break;
 
+      case ']':
+        loop_end = parser->reg_pointer;
+        parser->reg_pointer = loop_start;
+     
+        if (!(parser->reg_list[loop_conditional])) {
+          parser->reg_pointer = loop_end;
+        }
+     
+        break;
     }
-  
+
     iter ++;
   }
 }
